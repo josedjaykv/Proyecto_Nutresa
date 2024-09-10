@@ -49,7 +49,7 @@ def generar_login():
 
 # Prueba de menú con libreríoa externa
 # https://github.com/okld/streamlit-elements.git
-from streamlit_option_menu import option_menu
+# from streamlit_option_menu import option_menu
 
 # Como sidebar
 #selected = option_menu(
