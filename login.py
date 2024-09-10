@@ -24,6 +24,8 @@ def generarMenu(usuario):
         st.page_link('pages/Analisis_de_escenarios.py',label='Analisis de escenarios', icon=':material/emergency:')
         st.page_link('pages/Banco_de_datos.py',label='Banco de datos', icon=':material/account_balance:')
         st.page_link('pages/Pronosticos.py',label='Pronosticos', icon=':material/online_prediction:')
+        st.page_link('pages/showfiles.py',label='Files', icon=':material/online_prediction:')
+
         btnSalir = st.button('Salir', type = "primary")
         st.divider()
         if btnSalir:
