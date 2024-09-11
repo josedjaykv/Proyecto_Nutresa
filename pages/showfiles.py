@@ -3,21 +3,22 @@ import pandas as pd
 import os
 import login
 
+query_params = st.session_state
+st.session_state
+st.query_params
+
 login.generar_login()
 if 'usuario' in st.session_state:
-    st.header(':orange[Archivos]')
-
+    st.header('Banco de :orange[datos]')
+    
 # Carpeta donde se almacenan los archivos
 UPLOAD_FOLDER = 'uploads'
 
 # Obtener el archivo seleccionado de la URL
-query_params = st.query_params
 st.write(query_params)
 if 'file' in query_params:
-    file_name = query_params['file'][0]
+    file_name = query_params['file']
     file_path = os.path.join(UPLOAD_FOLDER, file_name)
-
-    st.write(file_name, file_path)
     
     # Cargar el archivo CSV y mostrarlo en un DataFrame
     if os.path.exists(file_path):

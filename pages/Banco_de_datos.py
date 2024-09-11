@@ -3,11 +3,12 @@ import pandas as pd
 import os
 import login
 
-
+st.session_state
 
 login.generar_login()
 if 'usuario' in st.session_state:
     st.header('Banco de :orange[datos]')
+    
 
 # Crear una carpeta para almacenar los archivos cargados
 UPLOAD_FOLDER = 'uploads'
@@ -20,6 +21,12 @@ st.title("Cargar Archivos CSV")
 uploaded_files = st.file_uploader(
     "Cargar archivos CSV", accept_multiple_files=True, type=['csv']
 )
+
+# Función para redirigir
+def redirect_to_showfile(file_name):
+    st.session_state['file'] = file_name
+    st.session_state['user'] = st.session_state['usuario']
+    st.switch_page('pages/showfiles.py')
 
 # Guardar los archivos en la carpeta del proyecto
 if uploaded_files:
@@ -34,4 +41,8 @@ if os.listdir(UPLOAD_FOLDER):
     st.write("Archivos guardados:")
     for file_name in os.listdir(UPLOAD_FOLDER):
         if file_name.endswith(".csv"):
-            st.markdown(f"[{file_name}](?file={file_name})")
+            if st.button(f"Ver {file_name}"):
+                redirect_to_showfile(file_name)
+
+
+
