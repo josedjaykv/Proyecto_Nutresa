@@ -2,9 +2,6 @@ import streamlit as st
 import login
 import pandas as pd
 
-st.write(st.session_state)
-
-
 login.generar_login()
 if 'usuario' in st.session_state:
     st.header('Analisis de :orange[escenarios]')

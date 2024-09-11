@@ -3,10 +3,6 @@ import pandas as pd
 import os
 import login
 
-query_params = st.session_state
-st.session_state
-st.query_params
-
 login.generar_login()
 if 'usuario' in st.session_state:
     st.header('Banco de :orange[datos]')
@@ -14,17 +10,32 @@ if 'usuario' in st.session_state:
 # Carpeta donde se almacenan los archivos
 UPLOAD_FOLDER = 'uploads'
 
+# Botón para saber sí es delimitado por punto y coma
+st.session_state['delimitado'] = st.radio(
+    'El CSV está delimitado por:',
+    ['Coma', 'Punto y coma'],
+    index=['Coma', 'Punto y coma'].index(st.session_state['delimitado'])
+)
+
 # Obtener el archivo seleccionado de la URL
-st.write(query_params)
-if 'file' in query_params:
-    file_name = query_params['file']
+if 'file' in st.session_state:
+    file_name = st.session_state['file']
     file_path = os.path.join(UPLOAD_FOLDER, file_name)
     
     # Cargar el archivo CSV y mostrarlo en un DataFrame
     if os.path.exists(file_path):
-        st.title(f"Contenido del archivo: {file_name}")
-        df = pd.read_csv(file_path)
-        st.dataframe(df)
+        st.subheader(f"Contenido del archivo: {file_name}")
+
+        if 'delimitado' not in st.session_state:
+            st.session_state['delimitado'] = 'Coma'
+        
+        if st.session_state['delimitado'] == 'Coma':
+            df = pd.read_csv(file_path, delimiter=',')
+
+        if st.session_state['delimitado'] == 'Punto y coma':
+            df = pd.read_csv(file_path, delimiter=';')
+
+        st.write(df)
     else:
         st.error("El archivo no existe.")
 else:

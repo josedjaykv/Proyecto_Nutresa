@@ -9,7 +9,6 @@ login.generar_login()
 if 'usuario' in st.session_state:
     st.header('Banco de :orange[datos]')
     
-
 # Crear una carpeta para almacenar los archivos cargados
 UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
