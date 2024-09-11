@@ -4,11 +4,19 @@ import os
 import login
 
 login.generar_login()
+
+st.page_link('pages/Banco_de_datos.py',label='Volver', icon=':material/account_balance:')
+
+file_name = st.session_state['file']
+
 if 'usuario' in st.session_state:
-    st.header('Banco de :orange[datos]')
+    st.header(f'Archivo :orange[{file_name}]')
     
 # Carpeta donde se almacenan los archivos
 UPLOAD_FOLDER = 'uploads'
+
+if 'delimitado' not in st.session_state:
+    st.session_state['delimitado'] = 'Coma'
 
 # Botón para saber sí es delimitado por punto y coma
 st.session_state['delimitado'] = st.radio(
@@ -19,7 +27,6 @@ st.session_state['delimitado'] = st.radio(
 
 # Obtener el archivo seleccionado de la URL
 if 'file' in st.session_state:
-    file_name = st.session_state['file']
     file_path = os.path.join(UPLOAD_FOLDER, file_name)
     
     # Cargar el archivo CSV y mostrarlo en un DataFrame
