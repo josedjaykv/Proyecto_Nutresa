@@ -5,7 +5,7 @@ import login
 
 login.generar_login()
 
-st.page_link('pages/Banco_de_datos.py',label='Volver', icon=':material/account_balance:')
+st.page_link('pages/Banco_de_datos.py',label='Volver', icon=':material/arrow_back_ios:')
 
 file_name = st.session_state['file']
 
