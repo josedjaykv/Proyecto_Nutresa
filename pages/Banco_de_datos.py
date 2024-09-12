@@ -3,8 +3,6 @@ import pandas as pd
 import os
 import login
 
-st.session_state
-
 login.generar_login()
 if 'usuario' in st.session_state:
     st.header('Banco de :orange[datos]')
@@ -14,11 +12,9 @@ UPLOAD_FOLDER = 'uploads'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-st.title("Cargar Archivos CSV")
-
 # Cargar múltiples archivos
 uploaded_files = st.file_uploader(
-    "Cargar archivos CSV", accept_multiple_files=True, type=['csv']
+    "Cargar Archivos CSV", accept_multiple_files=True, type=['csv']
 )
 
 # Función para redirigir
@@ -40,7 +36,7 @@ if os.listdir(UPLOAD_FOLDER):
     st.write("Archivos guardados:")
     for file_name in os.listdir(UPLOAD_FOLDER):
         if file_name.endswith(".csv"):
-            if st.button(f"Ver {file_name}"):
+            if st.button(f"{file_name}"):
                 redirect_to_showfile(file_name)
 
 
