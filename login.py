@@ -16,7 +16,7 @@ def generarMenu(usuario):
         dfusuarios= pd.read_csv('usuarios.csv')
         dfUsuario = dfusuarios[dfusuarios['usuario']==usuario]
         nombre = dfUsuario['nombre'].values[0]
-        st.subheader(f'Bienvenido {nombre}')        
+        st.subheader(f'Bienvenido, {nombre}')        
 
         st.page_link('inicio.py',label='Inicio', icon=':material/home:')
         st.subheader('Tableros')
