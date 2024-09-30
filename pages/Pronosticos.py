@@ -12,8 +12,8 @@ if 'usuario' in st.session_state:
 
     def get_delimiter(file_path, bytes = 4096):
         with open(file_path, 'r') as csv_file:
-            data = csv_file.read(bytes)
-            delimiter = csv.Sniffer().sniff(data).delimiter
+            data = csv_file.read(bytes) # Lee 4096 bytes del archivo
+            delimiter = csv.Sniffer().sniff(data).delimiter 
             return delimiter
     st.title(':orange[Pronosticos]')
 

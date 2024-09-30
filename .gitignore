@@ -2,3 +2,5 @@
 /virtualenv
 /streamlit_env
 *.csv
+*.pyc
+*.xlsx

@@ -1,49 +1,51 @@
 import streamlit as st
 import pandas as pd
 import os
+import csv
 import login
 
 login.generar_login()
-
 st.page_link('pages/Banco_de_datos.py',label='Volver', icon=':material/arrow_back_ios:')
 
-file_name = st.session_state['file']
-
 if 'usuario' in st.session_state:
-    st.header(f'Archivo :orange[{file_name}]')
-    
-# Carpeta donde se almacenan los archivos
-UPLOAD_FOLDER = 'uploads'
 
-if 'delimitado' not in st.session_state:
-    st.session_state['delimitado'] = 'Coma'
-
-# Botón para saber sí es delimitado por punto y coma
-st.session_state['delimitado'] = st.radio(
-    'El CSV está delimitado por:',
-    ['Coma', 'Punto y coma'],
-    index=['Coma', 'Punto y coma'].index(st.session_state['delimitado'])
-)
-
-# Obtener el archivo seleccionado de la URL
-if 'file' in st.session_state:
-    file_path = os.path.join(UPLOAD_FOLDER, file_name)
-    
-    # Cargar el archivo CSV y mostrarlo en un DataFrame
-    if os.path.exists(file_path):
-        st.subheader(f"Contenido del archivo: {file_name}")
-
-        if 'delimitado' not in st.session_state:
-            st.session_state['delimitado'] = 'Coma'
-        
-        if st.session_state['delimitado'] == 'Coma':
-            df = pd.read_csv(file_path, delimiter=',')
-
-        if st.session_state['delimitado'] == 'Punto y coma':
-            df = pd.read_csv(file_path, delimiter=';')
-
-        st.write(df)
+    # Obtener el archivo seleccionado de la URL
+    ####################################################
+    UPLOAD_FOLDER = 'uploads'
+    file_name = st.session_state.get('file', None)
+    if file_name:
+        file_path = os.path.join(UPLOAD_FOLDER, file_name)
     else:
-        st.error("El archivo no existe.")
-else:
-    st.error("No se ha seleccionado ningún archivo.")
+        st.error("No se ha seleccionado ningún archivo.")
+
+    st.header(f'Archivo :orange[{file_name}]')
+
+    # Función para obtener el delimitador de un archivo CSV
+    ####################################################
+    def get_delimiter(file_path, bytes = 4096):
+        file_extension = os.path.splitext(file_path)[1]
+        if file_extension == '.csv':
+            with open(file_path, 'r') as csv_file:
+                data = csv_file.read(bytes) # Lee 4096 bytes del archivo
+                delimiter = csv.Sniffer().sniff(data).delimiter 
+                return delimiter
+        elif file_extension == '.xlsx':
+            return None
+
+    st.session_state['delimitado'] = get_delimiter(file_path)
+
+    # Obtener el archivo seleccionado de la URL
+    ####################################################
+    if 'file' in st.session_state:   
+        # Cargar el archivo CSV y mostrarlo en un DataFrame
+        if os.path.exists(file_path):
+            st.subheader(f"Contenido del archivo: {file_path}")
+            if 'delimitado' not in st.session_state:
+                df = pd.read_csv(file_path, delimiter=',')
+            else:
+                df = pd.read_csv(file_path, delimiter=st.session_state['delimitado'])
+            st.write(df)
+        else:
+            st.error("El archivo no existe.")
+    else:
+        st.error("No se ha seleccionado ningún archivo.")
