@@ -23,7 +23,7 @@ if 'usuario' in st.session_state:
     # Función para obtener el delimitador de un archivo CSV
     ####################################################
     def get_delimiter(file_path, bytes = 4096):
-        file_extension = os.path.splitext(file_path)[1]
+        file_extension = os.path.splitext(file_path)[-1]
         if file_extension == '.csv':
             with open(file_path, 'r') as csv_file:
                 data = csv_file.read(bytes) # Lee 4096 bytes del archivo
@@ -39,12 +39,17 @@ if 'usuario' in st.session_state:
     if 'file' in st.session_state:   
         # Cargar el archivo CSV y mostrarlo en un DataFrame
         if os.path.exists(file_path):
-            st.subheader(f"Contenido del archivo: {file_path}")
             if 'delimitado' not in st.session_state:
                 df = pd.read_csv(file_path, delimiter=',')
+                edited_df = st.data_editor(df, num_rows='dynamic')
             else:
                 df = pd.read_csv(file_path, delimiter=st.session_state['delimitado'])
-            st.write(df)
+                edited_df = st.data_editor(df, num_rows='dynamic')
+
+            # Guardar los cambios en el archivo
+            if st.button("Guardar cambios"):
+                edited_df.to_csv(file_path, index=False)
+                st.success(f"Los cambios en {file_name} se han guardado exitosamente.")
         else:
             st.error("El archivo no existe.")
     else:
