@@ -35,9 +35,8 @@ if 'usuario' in st.session_state:
     if os.listdir(UPLOAD_FOLDER):
         st.write("Archivos guardados:")
         for file_name in os.listdir(UPLOAD_FOLDER):
-            if file_name.endswith(".csv"):
-                if st.button(f"{file_name}"):
-                    redirect_to_showfile(file_name)
+            if st.button(f"{file_name}"):
+                redirect_to_showfile(file_name)
 
 
 
