@@ -64,7 +64,8 @@ if 'usuario' in st.session_state:
                     edited_df.to_csv(file_path, index=False)
                 elif file_extension == '.xlsx':
                     save_to_excel(edited_df, file_path)
-                                    
+                    edited_df.to_excel(file_path, index=False)
+                
                 st.success(f"Los cambios en {file_name} se han guardado exitosamente.")
         else:
             st.error("El archivo no existe.")
