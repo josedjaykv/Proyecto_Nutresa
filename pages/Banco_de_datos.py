@@ -1,38 +1,22 @@
 import streamlit as st
 import pandas as pd
 import os
-<<<<<<< HEAD
-import login
-=======
 import sqlite3
 import login
 from database.db_manager import initialize_database
->>>>>>> a7c2eff (hola)
 
 # Iniciar sesión
 login.generar_login()
 
 if 'usuario' in st.session_state:
-<<<<<<< HEAD
-    st.header('Banco de :orange[datos]')
-    
-=======
     initialize_database()
     st.header('Banco de :orange[datos]')
 
->>>>>>> a7c2eff (hola)
     # Crear una carpeta para almacenar los archivos cargados
     UPLOAD_FOLDER = 'uploads'
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
 
-<<<<<<< HEAD
-    # Inicializar diccionario de etiquetas en session_state
-    if 'file_labels' not in st.session_state:
-        st.session_state['file_labels'] = {}
-
-=======
->>>>>>> a7c2eff (hola)
     # Colores para las etiquetas según el riesgo
     risk_colors = {
         'Riesgo regulatorio': 'orange',
@@ -47,8 +31,6 @@ if 'usuario' in st.session_state:
         st.session_state['user'] = st.session_state['usuario']
         st.switch_page('pages/showfiles.py')
 
-<<<<<<< HEAD
-=======
     # Función para guardar archivo y etiqueta en la base de datos
     def save_to_db(file_path, label):
         conn = sqlite3.connect("database/archivos.db")
@@ -59,7 +41,6 @@ if 'usuario' in st.session_state:
         conn.commit()
         conn.close()
 
->>>>>>> a7c2eff (hola)
     # Cargar múltiples archivos
     uploaded_files = st.file_uploader(
         "Cargar Archivos CSV o Excel", accept_multiple_files=True, type=['csv', 'xlsx']
@@ -74,10 +55,7 @@ if 'usuario' in st.session_state:
 
             # Guardar el archivo cargado en el estado
             st.session_state['selected_file'] = uploaded_file.name
-<<<<<<< HEAD
-=======
             st.session_state['selected_file_path'] = file_path
->>>>>>> a7c2eff (hola)
 
             # Mostrar un cuadro de selección de etiqueta después de subir el archivo
             st.session_state['show_label_select'] = True
@@ -90,29 +68,15 @@ if 'usuario' in st.session_state:
 
         # Cuando se confirma la etiqueta, desaparecer el selector
         if st.button('Confirmar etiqueta'):
-<<<<<<< HEAD
-            # Guardar la etiqueta en el estado
-            st.session_state['file_labels'][st.session_state['selected_file']] = label
-
-            # Mostrar el mensaje combinado
-=======
             # Guardar en la base de datos
             save_to_db(st.session_state['selected_file_path'], label)
 
->>>>>>> a7c2eff (hola)
             st.success(f"Archivo guardado: {st.session_state['selected_file']} - "
                        f"Etiqueta '{label}' asignada al archivo.")
 
             # Hacer que desaparezca el selector de etiqueta
             st.session_state['show_label_select'] = False
 
-<<<<<<< HEAD
-    # Mostrar archivos guardados con sus etiquetas y colores
-    if os.listdir(UPLOAD_FOLDER):
-        st.write("Archivos guardados:")
-        for file_name in os.listdir(UPLOAD_FOLDER):
-            label = st.session_state['file_labels'].get(file_name, 'Sin etiqueta')
-=======
     # Mostrar archivos guardados con sus etiquetas y colores desde la base de datos
     conn = sqlite3.connect("database/archivos.db")
     cursor = conn.cursor()
@@ -125,7 +89,6 @@ if 'usuario' in st.session_state:
         st.write("Archivos guardados:")
         for file_path, label in archivos:
             file_name = os.path.basename(file_path)
->>>>>>> a7c2eff (hola)
             color = risk_colors.get(label, 'gray')
 
             # Mostrar el archivo con su etiqueta coloreada
