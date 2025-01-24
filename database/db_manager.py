@@ -4,6 +4,8 @@ import sqlite3
 
 DB_PATH = "database/promedios.db"
 
+# prueba
+
 def initialize_database():
     conn = sqlite3.connect(DB_PATH) # Crear la conexión a la base de datos
     cursor = conn.cursor() # Crear un cursor para ejecutar comandos SQL
