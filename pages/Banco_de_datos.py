@@ -28,7 +28,7 @@ if 'usuario' in st.session_state:
     # Función para redirigir
     def redirect_to_showfile(file_name):
         st.session_state['file'] = file_name
-        st.session_state['user'] = st.session_state['usuario']
+        st.session_state['user'] = st.session_state['usuario'] # Para mantener en sesión al usuario
         st.switch_page('pages/showfiles.py')
 
     # Función para guardar archivo y etiqueta en la base de datos
@@ -46,6 +46,7 @@ if 'usuario' in st.session_state:
         "Cargar Archivos CSV o Excel", accept_multiple_files=True, type=['csv', 'xlsx']
     )
 
+    #######################
     # Mostrar un "pop-up" de selección de etiqueta al cargar un archivo
     if uploaded_files:
         for uploaded_file in uploaded_files:
@@ -60,7 +61,8 @@ if 'usuario' in st.session_state:
             # Mostrar un cuadro de selección de etiqueta después de subir el archivo
             st.session_state['show_label_select'] = True
 
-    # Si hay un archivo cargado y se debe seleccionar una etiqueta
+    ###################### Mejorar esta parte para que se vea mejor
+    # Si hay un archivo cargado y si se debe seleccionar una etiqueta
     if 'show_label_select' in st.session_state and st.session_state['show_label_select']:
         st.write(f"Seleccionar etiqueta de riesgo para el archivo: {st.session_state['selected_file']}")
         label = st.selectbox("Etiqueta de riesgo:", 
