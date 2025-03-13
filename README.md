@@ -23,3 +23,5 @@ macOS and Linux source
 `pip install joblib`
 `pip install prophet`
 `pip install streamlit-echarts`
+`pip install openpyxl`
+`pip install bcrypt`

@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import login
 import os
+import sqlite3
 import csv
 
 login.generar_login()
@@ -25,28 +26,41 @@ if 'usuario' in st.session_state:
     if not os.path.exists(UPLOAD_FOLDER):
         os.makedirs(UPLOAD_FOLDER)
 
-    if os.listdir(UPLOAD_FOLDER):
-        files = list()
-        st.subheader("Archivos Guardados:")
+    # if os.listdir(UPLOAD_FOLDER):
+    files = list()
+    st.subheader("Archivos Guardados:")
 
-        for file_name in os.listdir(UPLOAD_FOLDER):
-            if file_name.endswith(".csv"):
-                files.append(file_name)
+    for file_name in os.listdir(UPLOAD_FOLDER):
+        # if file_name.endswith(".csv"):
+        files.append(file_name)
 
-    seleccion = st.selectbox("Seleccionar Archivo:", files)
+    conn = sqlite3.connect("database/archivos.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT direccion, etiqueta FROM archivos")
+    archivos = cursor.fetchall()
+    conn.close()
+
+    if archivos:
+        st.write("Archivos guardados:")
+        for file_path, label in archivos:
+            file_name = os.path.basename(file_path)
+
+            col1, col2, col3 = st.columns(3)
+
+    seleccion = st.selectbox(label="Seleccionar Archivo:", options=archivos)
     path = os.path.join(f'uploads/{seleccion}')
-    archivo = pd.read_csv(path, delimiter=get_delimiter(path, 4096))
+    # archivo = pd.read_csv(path, delimiter=get_delimiter(path, 4096))
 
     st.divider()
 
-    archivo
+    # archivo
 
     st.divider()
 
-    seleccion_var_ind = st.selectbox("Seleccionar Variable Independiente:", get_cols(path))
-    seleccion_var_dep = st.selectbox("Seleccionar Variable Dependiente:", get_cols(path))
+    # seleccion_var_ind = st.selectbox("Seleccionar Variable Independiente:", get_cols(path))
+    # seleccion_var_dep = st.selectbox("Seleccionar Variable Dependiente:", get_cols(path))
 
-    if seleccion_var_ind != seleccion_var_dep:
-        st.line_chart(archivo, x=seleccion_var_ind, y=seleccion_var_dep)
+    # if seleccion_var_ind != seleccion_var_dep:
+        # st.line_chart(archivo, x=seleccion_var_ind, y=seleccion_var_dep)
 
     st.divider()
