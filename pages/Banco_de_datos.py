@@ -73,6 +73,8 @@ if 'usuario' in st.session_state:
     archivos = cursor.fetchall()
     conn.close()
 
+    st.session_state
+
     if archivos:
         st.write("Archivos guardados:")
         for file_path, label in archivos:
