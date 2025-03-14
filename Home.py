@@ -27,9 +27,15 @@ def generarMenu(usuario):
         st.page_link('pages/Analisis_de_escenarios.py', label='Analisis de escenarios', icon=':material/emergency:')
         st.page_link('pages/Pronosticos.py', label='Pronosticos', icon=':material/online_prediction:')
 
+        #Administrador de usuarios solo para el usuario admin
+        if usuario == 'admin':
+            st.subheader('Administración')
+            st.page_link('pages/Admin_usuarios.py', label='Gestión de usuarios', icon=':material/admin_panel_settings:')
+
+
         # Botón de salir
         btnSalir = st.button('Salir', type="primary")
         st.divider()
         if btnSalir:
             st.session_state.clear()
-            st.rerun()
+            st.rerun()  
