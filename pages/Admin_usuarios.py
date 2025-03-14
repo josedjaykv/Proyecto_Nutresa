@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import bcrypt
 import pandas as pd
+from Home import generarMenu
 
 def mostrar_admin_usuarios():
     if 'usuario' in st.session_state and st.session_state['usuario'] == 'admin':
@@ -49,6 +50,9 @@ def mostrar_admin_usuarios():
 
 if __name__ == "__main__":
     if 'usuario' in st.session_state:
+        # Generar el menú lateral
+        generarMenu(st.session_state['usuario'])
+        # Mostrar el contenido de la página
         mostrar_admin_usuarios()
     else:
         st.warning("Debes iniciar sesión primero")
