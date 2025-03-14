@@ -3,6 +3,11 @@ import login
 import pandas as pd
 import joblib
 from prophet import Prophet  # Asegúrate de tener Prophet importado
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import mean_squared_error
 
 # Lógica de inicio de sesión
 login.generar_login()
@@ -48,6 +53,76 @@ if 'usuario' in st.session_state:
     # Procesar información de precios
     precios_info = pd.read_csv('Data/materia_prima.csv', sep=';')
     precios_info['Date'] = pd.to_datetime(precios_info['Date'], format='%d/%m/%Y', errors='coerce')
+
+
+
+
+
+
+     # Cargar el modelo entrenado con KNeighborsRegressor
+    model = joblib.load('pages/modelos/Pork_price_model.pkl')
+
+    # Cargar los datos desde el archivo CSV
+    data = pd.read_csv('Data/materia_prima.csv', sep=';')
+
+    # Renombrar la columna 'Date' a 'ds' y convertir a datetime
+    data.rename(columns={'Date': 'ds'}, inplace=True)
+    data['ds'] = pd.to_datetime(data['ds'], format='%d/%m/%Y', errors='coerce')
+
+    # Seleccionar características relevantes
+    features = data.drop(['ds',  'cantidad_cacao', 'cafe_nal',
+                           'Precio_cafe', 'cantidad_cafe', 'Precio_carne_res',
+    'res_nal', 'cant_carne_res'], axis=1).ffill()
+    
+
+
+    # Reemplazar comas por puntos y convertir a float de manera segura
+    features = features.apply(lambda x: pd.to_numeric(x.astype(str).str.replace(',', '.', regex=False), errors='coerce'))
+
+    # Llenar valores faltantes después de la conversión
+    features.fillna(0, inplace=True)
+
+    # Escalar los datos
+    scaler = StandardScaler()
+    features_scaled = scaler.fit_transform(features)
+
+    # Realizar predicciones
+    predictions = model.predict(features_scaled)
+
+    # Crear DataFrame de predicciones con fechas correspondientes
+    prediction_df = pd.DataFrame({
+        'Fecha': data['ds'],
+        'Predicción Precio Carne Cerdo': predictions
+    })
+
+    # Mostrar las predicciones
+    st.header('Predicción de :orange[Precio de la Carne de Cerdo]')
+    st.write(prediction_df.head())
+
+    # Mostrar gráfico de las predicciones
+    st.line_chart(prediction_df.set_index('Fecha'), height=400)
+
+        # Mostrar cuántas características espera el modelo
+    st.write(f"El modelo espera {model.n_features_in_} características.")
+
+    # Revisar las columnas usadas en el modelo
+    st.write("Columnas del DataFrame después de la selección:", features.columns.tolist())
+
+    st.write("Revisar estadísticas del dataset:")
+    st.write(features.describe())
+
+    print(features.head())
+
+
+    # print(features['Precio_carne_cerdo'].unique())
+
+    # print(features.columns)
+
+
+
+
+
+
     
     # Realizar conversiones de precios
     precios_info['Precio_cacao_un'] = precios_info['Precio_cacao_und'].astype(str).str.replace(',', '').astype(float)
